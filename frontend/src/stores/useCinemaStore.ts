@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export type Cinema = {
-  cinemaIndex: number;
+  cinemaId: number;
   name: string;
   address: string;
   managerName: string;
@@ -17,16 +17,19 @@ export type NewCinema = {
 
 type CinemaState = {
   cinemaList: Cinema[];
-  addCinema: (cinema: Cinema) => void;
+  currentCinema: Cinema | null;
+  addCinema: (cinema: NewCinema) => void;
+  getCinema: (index: number) => void;
   getCinemaList: () => void;
   deleteCinema: (index: number) => void;
 };
 
-const url = "https://crudcrud.com/api/3ff16de6566e4c62aafa164fdb847bb7/cinema/";
+const url = "http://localhost:8080/api/cinema";
 
 export const useCinemaStore = create<CinemaState>((set) => ({
   cinemaList: [],
-  addCinema: (cinema: Cinema) => {
+  currentCinema: null,
+  addCinema: (cinema: NewCinema) => {
     fetch(url, {
       method: "POST",
       headers: {
@@ -49,20 +52,31 @@ export const useCinemaStore = create<CinemaState>((set) => ({
       });
   },
 
+  getCinema: (index) => {
+    fetch(url + "/" + index)
+      .then((res) => res.json())
+      .then((result) => {
+        set(() => ({ currentCinema: result }));
+      });
+  },
+
   deleteCinema: (index) => {
     set((state) => {
-      fetch(url + state.cinemaList[index]._id, {
+      fetch(url + "/" + state.cinemaList[index].cinemaId, {
         method: "DELETE",
         headers: {
           "content-type": "application/json",
         },
-      }).then(() => {
-        set((state) => ({
-          cinemaList: state.cinemaList.filter(
-            (_, cinemaIndex) => cinemaIndex !== index,
-          ),
-        }));
-      });
+      })
+        .then((res) => {
+          set((state) => ({
+            cinemaList: state.cinemaList.filter(
+              (_, cinemaId) => cinemaId !== index,
+            ),
+          }));
+          return res.text();
+        })
+        .then((result) => console.log(result));
       return state;
     });
   },

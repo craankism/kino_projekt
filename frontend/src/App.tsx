@@ -4,6 +4,8 @@ import SearchAppBar from "./components/nav/SearchAppBar";
 import Cinema from "./components/views/Cinema";
 import { Container } from "@mui/material";
 import CreateCinema from "./components/views/CreateCinema";
+import ShowCinema from "./components/views/ShowCinema";
+import CreateHall from "./components/views/CreateHall";
 
 const App = (): JSX.Element => {
   return (
@@ -11,8 +13,10 @@ const App = (): JSX.Element => {
       <SearchAppBar />
       <Container>
         <Routes>
-          <Route path="/cinema" element={<Cinema />} />
+          <Route path="/" element={<Cinema />} />
           <Route path="/cinema/create" element={<CreateCinema />} />
+          <Route path="/cinema/show/:cinemaId" element={<ShowCinema />} />
+          <Route path="/hall/create" element={<CreateHall />} />
         </Routes>
       </Container>
     </>

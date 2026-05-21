@@ -7,21 +7,20 @@ import { useCinemaStore } from "../../stores/useCinemaStore";
 
 const CreateCinema = (): JSX.Element => {
   const navigate = useNavigate();
+  const { addCinema } = useCinemaStore();
+
   const [name, setName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [managerName, setManagerName] = useState<string>("");
   const [maxCountRooms, setMaxCountRooms] = useState<number>(0);
 
-  const { addCinema } = useCinemaStore();
 
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    let index = 0;
-    index++;
-    const newCinema = { cinemaIndex: index, name, address, managerName, maxCountRooms };
+    const newCinema = { name, address, managerName, maxCountRooms };
     addCinema(newCinema);
-    navigate("/cinema");
+    navigate("/");
   };
 
   return (

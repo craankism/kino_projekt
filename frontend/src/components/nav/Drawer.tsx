@@ -9,7 +9,8 @@ import MovieIcon from "@mui/icons-material/Movie";
 import HouseIcon from "@mui/icons-material/House";
 import EventSeatIcon from "@mui/icons-material/EventSeat";
 import { useNavigate } from "react-router-dom";
-import { Divider } from "@mui/material";
+import { useCinemaStore } from "../../stores/useCinemaStore";
+import { useHallStore } from "../../stores/useHallStore";
 
 type TemporaryDrawerProps = {
   open: boolean;
@@ -19,40 +20,52 @@ type TemporaryDrawerProps = {
 function TemporaryDrawer({ open, onClose }: TemporaryDrawerProps) {
   const navigate = useNavigate();
 
+  const { cinemaList } = useCinemaStore();
+  const { hallList } = useHallStore();
+
   const handleClose = () => {
     onClose();
-  };
-
-  const handleNavigation = (index: number) => {
-    if (index === 0) {
-      navigate("/cinema");
-    } else if (index === 1) {
-      navigate("/room");
-    } else {
-      navigate("/movie");
-    }
-
-    handleClose();
   };
 
   const drawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={handleClose}>
       <List>
-        {["Kino", "Saal", "Film"].map((text, index) => (
-          <>
-            <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => handleNavigation(index)}>
+        <>
+          <ListItem onClick={() => navigate("/")} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <HouseIcon />
+              </ListItemIcon>
+              <ListItemText primary="Kino" />
+            </ListItemButton>
+          </ListItem>
+          {cinemaList.map((cinema, index) => (
+            <ListItem
+              onClick={() => navigate("/cinema/show/" + cinema.cinemaId)}
+              key={index}
+              sx={{ ml: 2 }}
+            >
+              <ListItemButton>
                 <ListItemIcon>
-                  {index === 0 ? <HouseIcon /> : null}
-                  {index === 1 ? <EventSeatIcon /> : null}
-                  {index === 2 ? <MovieIcon /> : null}
+                  <MovieIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={cinema.name} />
               </ListItemButton>
             </ListItem>
-            <Divider />
-          </>
-        ))}
+          ))}
+          {hallList.map((hall, index) => (
+            <ListItem key={index}>
+              <ListItemIcon>
+                <EventSeatIcon />
+              </ListItemIcon>
+              <ListItemButton
+                onClick={() => navigate("/cinema/show/" + hall.hallId)}
+              >
+                <ListItemText primary={hall.hallId} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </>
       </List>
     </Box>
   );
