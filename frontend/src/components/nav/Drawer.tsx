@@ -7,10 +7,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MovieIcon from "@mui/icons-material/Movie";
 import HouseIcon from "@mui/icons-material/House";
-import EventSeatIcon from "@mui/icons-material/EventSeat";
 import { useNavigate } from "react-router-dom";
 import { useCinemaStore } from "../../stores/useCinemaStore";
-import { useHallStore } from "../../stores/useHallStore";
 
 type TemporaryDrawerProps = {
   open: boolean;
@@ -21,7 +19,6 @@ function TemporaryDrawer({ open, onClose }: TemporaryDrawerProps) {
   const navigate = useNavigate();
 
   const { cinemaList } = useCinemaStore();
-  const { hallList } = useHallStore();
 
   const handleClose = () => {
     onClose();
@@ -50,18 +47,6 @@ function TemporaryDrawer({ open, onClose }: TemporaryDrawerProps) {
                   <MovieIcon />
                 </ListItemIcon>
                 <ListItemText primary={cinema.name} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-          {hallList.map((hall, index) => (
-            <ListItem key={index}>
-              <ListItemIcon>
-                <EventSeatIcon />
-              </ListItemIcon>
-              <ListItemButton
-                onClick={() => navigate("/cinema/show/" + hall.hallId)}
-              >
-                <ListItemText primary={hall.hallId} />
               </ListItemButton>
             </ListItem>
           ))}

@@ -8,15 +8,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SaveIcon from "@mui/icons-material/Save";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { useNavigate, useParams } from "react-router-dom";
 import { useHallStore } from "../../stores/useHallStore";
 
-const CreateHall = (): JSX.Element => {
+const EditHall = (): JSX.Element => {
   const navigate = useNavigate();
   const params = useParams();
-  const { addHall } = useHallStore();
+  const { currentHall, editHall } = useHallStore();
 
   const [capacity, setCapacity] = useState<number>(0);
   const [supportedMovieVersion, setSupportedMovieVersion] =
@@ -25,9 +26,37 @@ const CreateHall = (): JSX.Element => {
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const cinemaId = Number(params.cinemaId);
+    const hallId = Number(params.hallId);
     const newHall = { capacity, supportedMovieVersion, cinemaId };
-    addHall(newHall);
+    editHall(newHall, hallId);
     navigate("/");
+  };
+
+  useEffect(() => {
+    setCapacity(currentHall?.capacity || 0);
+    setSupportedMovieVersion(currentHall?.supportedMovieVersion || "");
+  }, [currentHall]);
+
+  const checkVersion = (value: string): boolean => {
+    switch (value) {
+      case "D2D":
+        if (currentHall?.supportedMovieVersion != "DBOX") {
+          return true;
+        }
+        return true;
+      case "R3D":
+        if (currentHall?.supportedMovieVersion != "DBOX") {
+          return true;
+        }
+        return false;
+      case "DBOX":
+        if (currentHall?.supportedMovieVersion === "DBOX") {
+          return false;
+        }
+        return true;
+      default:
+        return false;
+    }
   };
 
   return (
@@ -43,7 +72,7 @@ const CreateHall = (): JSX.Element => {
               id="standard-required"
               label="Anzahl Sitzplätze"
               placeholder="20"
-              defaultValue={capacity}
+              value={capacity}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setCapacity(Number(e.target.value))
               }
@@ -53,6 +82,7 @@ const CreateHall = (): JSX.Element => {
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <RadioGroup
+              value={supportedMovieVersion}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setSupportedMovieVersion(e.target.value)
               }
@@ -61,22 +91,39 @@ const CreateHall = (): JSX.Element => {
                 control={<Radio />}
                 label="D2D (Digital 2D)"
                 value="D2D"
+                disabled={checkVersion("D2D")}
               />
               <FormControlLabel
                 control={<Radio />}
                 label="R3D (Real D 3D)"
                 value="R3D"
+                disabled={checkVersion("R3D")}
               />
               <FormControlLabel
                 control={<Radio />}
-                label="DBOX (D-Box 5D)"
+                label="DBox (D-Box 5D)"
                 value="DBOX"
+                disabled={checkVersion("DBOX")}
               />
             </RadioGroup>
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <Button type="submit" variant="contained" startIcon={<SaveIcon />}>
+            <Button
+              type="submit"
+              variant="contained"
+              startIcon={<SaveIcon />}
+              sx={{ mr: 2 }}
+            >
               Speichern
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              startIcon={<NavigateBeforeIcon />}
+              sx={{ mr: 2 }}
+              onClick={() => navigate(-1)}
+            >
+              Zurück
             </Button>
           </Grid>
         </Grid>
@@ -85,4 +132,4 @@ const CreateHall = (): JSX.Element => {
   );
 };
 
-export default CreateHall;
+export default EditHall;

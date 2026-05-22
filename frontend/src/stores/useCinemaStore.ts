@@ -18,10 +18,10 @@ export type NewCinema = {
 type CinemaState = {
   cinemaList: Cinema[];
   currentCinema: Cinema | null;
-  addCinema: (cinema: NewCinema) => void;
-  getCinema: (index: number) => void;
-  getCinemaList: () => void;
-  deleteCinema: (index: number) => void;
+  addCinema: (cinema: NewCinema) => Promise<void>;
+  getCinema: (index: number) => Promise<void>;
+  getCinemaList: () => Promise<void>;
+  deleteCinema: (index: number) => Promise<void>;
 };
 
 const url = "http://localhost:8080/api/cinema";
@@ -29,55 +29,45 @@ const url = "http://localhost:8080/api/cinema";
 export const useCinemaStore = create<CinemaState>((set) => ({
   cinemaList: [],
   currentCinema: null,
-  addCinema: (cinema: NewCinema) => {
-    fetch(url, {
+  addCinema: async (cinema: NewCinema) => {
+    const res = await fetch(url, {
       method: "POST",
       headers: {
         "content-type": "application/JSON",
       },
       body: JSON.stringify(cinema),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        set((state) => ({ cinemaList: [...state.cinemaList, result] }));
-      });
-  },
-
-  getCinemaList: () => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((result) => {
-        set(() => ({ cinemaList: result }));
-      });
-  },
-
-  getCinema: (index) => {
-    fetch(url + "/" + index)
-      .then((res) => res.json())
-      .then((result) => {
-        set(() => ({ currentCinema: result }));
-      });
-  },
-
-  deleteCinema: (index) => {
-    set((state) => {
-      fetch(url + "/" + state.cinemaList[index].cinemaId, {
-        method: "DELETE",
-        headers: {
-          "content-type": "application/json",
-        },
-      })
-        .then((res) => {
-          set((state) => ({
-            cinemaList: state.cinemaList.filter(
-              (_, cinemaId) => cinemaId !== index,
-            ),
-          }));
-          return res.text();
-        })
-        .then((result) => console.log(result));
-      return state;
     });
+
+    const result = await res.json();
+    console.log(result);
+    set((state) => ({ cinemaList: [...state.cinemaList, result] }));
+  },
+
+  getCinemaList: async () => {
+    const res = await fetch(url);
+    const result = await res.json();
+    set(() => ({ cinemaList: result }));
+  },
+
+  getCinema: async (index) => {
+    const res = await fetch(url + "/" + index);
+    const result = await res.json();
+    set(() => ({ currentCinema: result }));
+  },
+
+  deleteCinema: async (index) => {
+    const res = await fetch(url + "/" + index, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+
+    set((state) => ({
+      cinemaList: state.cinemaList.filter(
+        (cinema) => cinema.cinemaId !== index,
+      ),
+    }));
+    console.log(await res.text());
   },
 }));

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCinemaStore } from "../../stores/useCinemaStore";
+import HallTable from "../hall/HallTable";
 
 const ShowCinema = (): JSX.Element => {
   const navigate = useNavigate();
@@ -17,68 +18,73 @@ const ShowCinema = (): JSX.Element => {
   }, [params.cinemaId, getCinema]);
 
   return (
-    <Grid container spacing={2}>
-      <Grid size={{ xs: 12, md: 6 }}>
-        <TextField
-          disabled
-          id="standard-read-only-input"
-          helperText="Kino Id"
-          defaultValue={currentCinema?.cinemaId}
-          variant="standard"
-          fullWidth
-        />
+    <>
+      <Grid container spacing={2}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <TextField
+            disabled
+            id="standard-read-only-input"
+            helperText="Kino Id"
+            defaultValue={currentCinema?.cinemaId}
+            variant="standard"
+            fullWidth
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <TextField
+            disabled
+            id="standard-read-only-input"
+            helperText="NameKino"
+            defaultValue={currentCinema?.name}
+            variant="standard"
+            fullWidth
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <TextField
+            disabled
+            id="standard-read-only-input"
+            helperText="Adresse"
+            defaultValue={currentCinema?.address}
+            variant="standard"
+            fullWidth
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <TextField
+            disabled
+            id="standard-read-only-input"
+            helperText="Name des Managers"
+            defaultValue={currentCinema?.managerName}
+            variant="standard"
+            fullWidth
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <TextField
+            disabled
+            id="standard-read-only-input"
+            helperText="max. Anzahl an Kinosälen"
+            defaultValue={currentCinema?.maxCountRooms}
+            variant="standard"
+            fullWidth
+          />
+        </Grid>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            startIcon={<SaveIcon />}
+            onClick={() => navigate("/")}
+          >
+            Back
+          </Button>
+        </Grid>
       </Grid>
-      <Grid size={{ xs: 12, md: 6 }}>
-        <TextField
-          disabled
-          id="standard-read-only-input"
-          helperText="NameKino"
-          defaultValue={currentCinema?.name}
-          variant="standard"
-          fullWidth
-        />
+      <Grid size={{ xs: 12, md: 6 }}> 
+        <HallTable cinemaId={currentCinema?.cinemaId || 0}/>
       </Grid>
-      <Grid size={{ xs: 12, md: 6 }}>
-        <TextField
-          disabled
-          id="standard-read-only-input"
-          helperText="Adresse"
-          defaultValue={currentCinema?.address}
-          variant="standard"
-          fullWidth
-        />
-      </Grid>
-      <Grid size={{ xs: 12, md: 6 }}>
-        <TextField
-          disabled
-          id="standard-read-only-input"
-          helperText="Name des Managers"
-          defaultValue={currentCinema?.managerName}
-          variant="standard"
-          fullWidth
-        />
-      </Grid>
-      <Grid size={{ xs: 12, md: 6 }}>
-        <TextField
-          disabled
-          id="standard-read-only-input"
-          helperText="max. Anzahl an Kinosälen"
-          defaultValue={currentCinema?.maxCountRooms}
-          variant="standard"
-          fullWidth
-        />
-      </Grid>
-      <Grid size={{ xs: 12, md: 6 }}>
-        <Button
-          type="submit"
-          variant="contained"
-          startIcon={<SaveIcon />}
-          onClick={() => navigate("/cinema")}
-        >
-          Back
-        </Button>
-      </Grid>
-    </Grid>
+    </>
   );
 };
 

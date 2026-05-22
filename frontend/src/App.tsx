@@ -6,6 +6,7 @@ import { Container } from "@mui/material";
 import CreateCinema from "./components/views/CreateCinema";
 import ShowCinema from "./components/views/ShowCinema";
 import CreateHall from "./components/views/CreateHall";
+import EditHall from "./components/views/EditHall";
 
 const App = (): JSX.Element => {
   return (
@@ -16,7 +17,8 @@ const App = (): JSX.Element => {
           <Route path="/" element={<Cinema />} />
           <Route path="/cinema/create" element={<CreateCinema />} />
           <Route path="/cinema/show/:cinemaId" element={<ShowCinema />} />
-          <Route path="/hall/create" element={<CreateHall />} />
+          <Route path="/hall/create/:cinemaId" element={<CreateHall />} />
+          <Route path="/hall/edit/:cinemaId/:hallId" element={<EditHall />} />
         </Routes>
       </Container>
     </>
