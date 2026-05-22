@@ -15,5 +15,5 @@ public class ShowHallDTO {
     private int hallId;
     private int capacity;
     private SupportedMovieVersion supportedMovieVersion;
-    private int cinemaId;
+    private ShowCinemaDTO cinema;
 }
