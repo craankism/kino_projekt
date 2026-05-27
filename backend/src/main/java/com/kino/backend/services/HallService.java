@@ -29,11 +29,11 @@ public class HallService {
         this.cinemaRepo = cinemaRepo;
     }
 
-    public ShowHallDTO createHall(CreateHallDTO createHallDTO) throws Exception {
+    public ShowHallDTO createHall(CreateHallDTO createHallDTO) {
         Cinema cinema = cinemaRepo.findById(createHallDTO.getCinemaId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cinema not found"));
         if (cinema.getMaxCountRooms() < cinema.getCinemaId()) {
-            throw new Exception("Maximale Raumanzahl überschritten!");
+            throw new RuntimeException("Maximale Raumanzahl überschritten!");
         }
         Hall hall = new Hall();
         hall.setCapacity(createHallDTO.getCapacity());
@@ -44,12 +44,12 @@ public class HallService {
     }
 
     public List<ShowHallDTO> getAllHalls() {
-        List<ShowHallDTO> allHalls = new ArrayList<>();
-        List<Hall> halls = hallRepo.findAll();
-        for (Hall hall : halls) {
-            allHalls.add(convertEntityToDto(hall));
+        List<ShowHallDTO> allHallList = new ArrayList<>();
+        List<Hall> hallList = hallRepo.findAll();
+        for (Hall hall : hallList) {
+            allHallList.add(convertEntityToDto(hall));
         }
-        return allHalls;
+        return allHallList;
     }
 
     public ShowHallDTO getHall(int hallId) {

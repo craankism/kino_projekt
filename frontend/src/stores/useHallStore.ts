@@ -17,11 +17,11 @@ export type NewHall = {
 type hallState = {
   hallList: Hall[];
   currentHall: Hall | null;
-  addHall: (hall: NewHall) => Promise<void>;
-  getHall: (index: number) => Promise<void>;
-  getHallList: () => Promise<void>;
-  editHall: (hall: NewHall, index: number) => Promise<void>;
-  deleteHall: (index: number) => Promise<void>;
+  addHall: (hall: NewHall) => void;
+  getHall: (index: number) => void;
+  getHallList: () => void;
+  editHall: (hall: NewHall, index: number) => void;
+  deleteHall: (index: number) => void;
 };
 
 const url = "http://localhost:8080/api/hall";
@@ -29,60 +29,70 @@ const url = "http://localhost:8080/api/hall";
 export const useHallStore = create<hallState>((set) => ({
   hallList: [],
   currentHall: null,
-  addHall: async (hall: NewHall) => {
-    const res = await fetch(url, {
+  addHall: (hall: NewHall) => {
+    fetch(url, {
       method: "POST",
       headers: {
         "content-type": "application/JSON",
       },
       body: JSON.stringify(hall),
-    });
-
-    const result = await res.json();
-    console.log(result);
-    set((state) => ({ hallList: [...state.hallList, result] }));
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        set((state) => ({ hallList: [...state.hallList, result] }));
+      });
   },
 
-  getHallList: async () => {
-    const res = await fetch(url);
-    const result = await res.json();
-    set(() => ({ hallList: result }));
+  getHallList: () => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((result) => {
+        set(() => ({ hallList: result }));
+      });
   },
 
-  getHall: async (index) => {
-    const res = await fetch(url + "/" + index);
-    const result = await res.json();
-    set(() => ({ currentHall: result }));
+  getHall: (index) => {
+    fetch(url + "/" + index)
+      .then((res) => res.json())
+      .then((result) => {
+        set(() => ({ currentHall: result }));
+      });
   },
 
-  editHall: async (hall, index) => {
-    const res = await fetch(url + "/" + index, {
+  editHall: (hall, index) => {
+    fetch(url + "/" + index, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
       },
       body: JSON.stringify(hall),
-    });
-
-    const result = await res.json();
-    set((state) => ({
-      hallList: state.hallList.map((hall, hallId) =>
-        hallId === index ? result : hall,
-      ),
-    }));
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        set((state) => ({
+          hallList: state.hallList.map((hall, hallId) =>
+            hallId === index ? result : hall,
+          ),
+        }));
+      });
   },
 
-  deleteHall: async (index) => {
-    const res = await fetch(url + "/" + index, {
+  deleteHall: (index) => {
+    fetch(url + "/" + index, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
       },
-    });
-
-    set((state) => ({
-      hallList: state.hallList.filter((hall) => hall.hallId !== index),
-    }));
-    console.log(await res.text());
+    })
+      .then((res) => {
+        set((state) => ({
+          hallList: state.hallList.filter((hall) => hall.hallId !== index),
+        }));
+        return res.text();
+      })
+      .then((text) => {
+        console.log(text);
+      });
   },
 }));

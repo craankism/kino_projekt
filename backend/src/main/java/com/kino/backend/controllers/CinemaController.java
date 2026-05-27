@@ -15,15 +15,14 @@ import com.kino.backend.dtos.req.CreateCinemaDTO;
 import com.kino.backend.dtos.res.ShowCinemaDTO;
 import com.kino.backend.services.CinemaService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("api/cinema")
 public class CinemaController {
 
     private final CinemaService cinemaService;
-
-    public CinemaController(CinemaService cinemaService) {
-        this.cinemaService = cinemaService;
-    }
 
     @PostMapping
     public ShowCinemaDTO createCinema(@RequestBody CreateCinemaDTO createCinemaDTO) {

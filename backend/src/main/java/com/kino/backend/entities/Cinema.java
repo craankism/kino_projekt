@@ -3,6 +3,7 @@ package com.kino.backend.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,6 +38,6 @@ public class Cinema {
     @Column(nullable = false)
     private int maxCountRooms;
 
-    @OneToMany(mappedBy = "cinema")
-    private List<Hall> halls = new ArrayList<>();
+    @OneToMany(mappedBy = "cinema", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Hall> hallList = new ArrayList<>();
 }

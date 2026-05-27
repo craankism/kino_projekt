@@ -7,6 +7,8 @@ import CreateCinema from "./components/views/CreateCinema";
 import ShowCinema from "./components/views/ShowCinema";
 import CreateHall from "./components/views/CreateHall";
 import EditHall from "./components/views/EditHall";
+import CreateMovie from "./components/views/CreateMovie";
+import ShowMovies from "./components/views/ShowMovies";
 
 const App = (): JSX.Element => {
   return (
@@ -19,6 +21,8 @@ const App = (): JSX.Element => {
           <Route path="/cinema/show/:cinemaId" element={<ShowCinema />} />
           <Route path="/hall/create/:cinemaId" element={<CreateHall />} />
           <Route path="/hall/edit/:cinemaId/:hallId" element={<EditHall />} />
+          <Route path="/movie/create" element={<CreateMovie />} />
+          <Route path="/movie/show" element={<ShowMovies />} />
         </Routes>
       </Container>
     </>

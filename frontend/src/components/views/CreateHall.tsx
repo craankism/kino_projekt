@@ -1,6 +1,5 @@
 import type { JSX } from "@emotion/react/jsx-runtime";
 import {
-  Button,
   FormControlLabel,
   Grid,
   Radio,
@@ -9,16 +8,16 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate, useParams } from "react-router-dom";
 import { useHallStore } from "../../stores/useHallStore";
+import SaveAndBackButton from "../nav/SaveAndBackButton";
 
 const CreateHall = (): JSX.Element => {
   const navigate = useNavigate();
   const params = useParams();
   const { addHall } = useHallStore();
 
-  const [capacity, setCapacity] = useState<number>(0);
+  const [capacity, setCapacity] = useState<number>(2);
   const [supportedMovieVersion, setSupportedMovieVersion] =
     useState<string>("");
 
@@ -74,11 +73,7 @@ const CreateHall = (): JSX.Element => {
               />
             </RadioGroup>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Button type="submit" variant="contained" startIcon={<SaveIcon />}>
-              Speichern
-            </Button>
-          </Grid>
+          <SaveAndBackButton />
         </Grid>
       </form>
     </>

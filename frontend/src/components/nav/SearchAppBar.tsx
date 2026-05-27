@@ -34,7 +34,7 @@ function SearchAppBar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            Kino
+            Kinoverwaltung
           </Typography>
         </Toolbar>
       </AppBar>

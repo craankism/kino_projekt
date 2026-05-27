@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 import com.kino.backend.dtos.req.CreateCinemaDTO;
 import com.kino.backend.dtos.res.ShowCinemaDTO;
 import com.kino.backend.entities.Cinema;
+import com.kino.backend.entities.Hall;
 import com.kino.backend.repos.CinemaRepo;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CinemaService {
 
     private final CinemaRepo cinemaRepo;
-
-    public CinemaService(CinemaRepo cinemaRepo) {
-        this.cinemaRepo = cinemaRepo;
-    }
 
     public ShowCinemaDTO createCinema(CreateCinemaDTO createCinemaDTO) {
         Cinema cinema = new Cinema();
@@ -41,19 +41,20 @@ public class CinemaService {
 
     public ShowCinemaDTO getCinema(int cinemaId) {
         Optional<Cinema> optionalCinema = cinemaRepo.findById(cinemaId);
-        Cinema cinema = optionalCinema.orElse(null);
+        Cinema cinema = optionalCinema.orElseThrow(() -> new RuntimeException("Cinema not found"));
         return convertEntityToDto(cinema);
     }
 
     public String deleteCinema(int cinemaId) {
-        for (Cinema cinema : cinemaRepo.findAll()) {
-            if (cinema.getCinemaId() == cinemaId) {
-                cinemaRepo.delete(cinema);
-                return "Kino gelöscht!";
+        Optional<Cinema> optionalCinema = cinemaRepo.findById(cinemaId);
+        Cinema cinema = optionalCinema.orElseThrow(() -> new RuntimeException("Cinema not found"));
+        for (Hall hall : cinema.getHallList()) {
+            if (hall.getCinema().getCinemaId() == cinemaId && hall.getMovieList().size() > 0) {
+                throw new RuntimeException("Cannot delete cinema with movies in halls");
             }
         }
-        return "Kino nicht gefunden";
-
+        cinemaRepo.delete(cinema);
+        return "Kino gelöscht!";
     }
 
     public ShowCinemaDTO convertEntityToDto(Cinema cinema) {

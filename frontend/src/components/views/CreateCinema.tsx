@@ -1,20 +1,18 @@
 import type { JSX } from "@emotion/react/jsx-runtime";
-import { Button, Grid, TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import React, { useState } from "react";
-import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router-dom";
 import { useCinemaStore } from "../../stores/useCinemaStore";
+import SaveAndBackButton from "../nav/SaveAndBackButton";
 
 const CreateCinema = (): JSX.Element => {
   const navigate = useNavigate();
   const { addCinema } = useCinemaStore();
 
-  const [name, setName] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
-  const [managerName, setManagerName] = useState<string>("");
-  const [maxCountRooms, setMaxCountRooms] = useState<number>(0);
-
-
+  const [name, setName] = useState<string>("Cineplexx");
+  const [address, setAddress] = useState<string>("Hauptstr.");
+  const [managerName, setManagerName] = useState<string>("Hans Bauer");
+  const [maxCountRooms, setMaxCountRooms] = useState<number>(55);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -82,11 +80,7 @@ const CreateCinema = (): JSX.Element => {
             fullWidth
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Button type="submit" variant="contained" startIcon={<SaveIcon />}>
-            Speichern
-          </Button>
-        </Grid>
+        <SaveAndBackButton />
       </Grid>
     </form>
   );

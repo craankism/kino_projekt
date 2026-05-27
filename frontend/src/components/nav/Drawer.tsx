@@ -7,8 +7,11 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MovieIcon from "@mui/icons-material/Movie";
 import HouseIcon from "@mui/icons-material/House";
+import EventSeatIcon from '@mui/icons-material/EventSeat';
 import { useNavigate } from "react-router-dom";
 import { useCinemaStore } from "../../stores/useCinemaStore";
+import { Divider } from "@mui/material";
+
 
 type TemporaryDrawerProps = {
   open: boolean;
@@ -44,12 +47,25 @@ function TemporaryDrawer({ open, onClose }: TemporaryDrawerProps) {
             >
               <ListItemButton>
                 <ListItemIcon>
-                  <MovieIcon />
+                  <EventSeatIcon />
                 </ListItemIcon>
                 <ListItemText primary={cinema.name} />
               </ListItemButton>
             </ListItem>
           ))}
+          <Divider />
+
+            <ListItem
+              onClick={() => navigate("/movie/show/")}
+              sx={{ml: -2}}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <MovieIcon />
+                </ListItemIcon>
+                <ListItemText primary="Filme" />
+              </ListItemButton>
+            </ListItem>
         </>
       </List>
     </Box>

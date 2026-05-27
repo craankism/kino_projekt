@@ -1,6 +1,5 @@
 import type { JSX } from "@emotion/react/jsx-runtime";
 import {
-  Button,
   FormControlLabel,
   Grid,
   Radio,
@@ -9,10 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import SaveIcon from "@mui/icons-material/Save";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { useNavigate, useParams } from "react-router-dom";
 import { useHallStore } from "../../stores/useHallStore";
+import SaveAndBackButton from "../nav/SaveAndBackButton";
 
 const EditHall = (): JSX.Element => {
   const navigate = useNavigate();
@@ -107,25 +105,7 @@ const EditHall = (): JSX.Element => {
               />
             </RadioGroup>
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Button
-              type="submit"
-              variant="contained"
-              startIcon={<SaveIcon />}
-              sx={{ mr: 2 }}
-            >
-              Speichern
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              startIcon={<NavigateBeforeIcon />}
-              sx={{ mr: 2 }}
-              onClick={() => navigate(-1)}
-            >
-              Zurück
-            </Button>
-          </Grid>
+          <SaveAndBackButton />
         </Grid>
       </form>
     </>
