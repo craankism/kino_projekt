@@ -5,15 +5,18 @@ import { useCinemaStore } from "../../stores/useCinemaStore";
 
 type DeleteCinemaButtonProps = {
   cinemaId: number;
+  disabled: boolean;
 };
 
 const DeleteCinemaButton: React.FC<DeleteCinemaButtonProps> = ({
   cinemaId,
+  disabled,
 }) => {
   const { deleteCinema } = useCinemaStore();
 
   return (
     <Button
+      disabled={disabled}
       startIcon={<DeleteIcon />}
       size="small"
       variant="contained"

@@ -11,11 +11,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useHallStore } from "../../stores/useHallStore";
 import SaveAndBackButton from "../nav/SaveAndBackButton";
+import { useMovieStore } from "../../stores/useMovieStore";
 
 const EditHall = (): JSX.Element => {
   const navigate = useNavigate();
   const params = useParams();
-  const { currentHall, editHall } = useHallStore();
+  const { currentHall, editHall, getHallList } = useHallStore();
+  const { updateMovie, movieList } = useMovieStore();
 
   const [capacity, setCapacity] = useState<number>(0);
   const [supportedMovieVersion, setSupportedMovieVersion] =
@@ -27,6 +29,12 @@ const EditHall = (): JSX.Element => {
     const hallId = Number(params.hallId);
     const newHall = { capacity, supportedMovieVersion, cinemaId };
     editHall(newHall, hallId);
+    // movieList -> hallList -> hallId -> delete id
+    movieList.forEach((movie) => {
+      movie.hallList.map()
+    })
+    updateMovie()
+    getHallList();
     navigate("/");
   };
 

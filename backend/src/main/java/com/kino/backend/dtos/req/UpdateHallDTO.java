@@ -1,4 +1,4 @@
-package com.kino.backend.dtos.res;
+package com.kino.backend.dtos.req;
 
 import com.kino.backend.enums.SupportedMovieVersion;
 
@@ -7,13 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class ShowHallDTO {
-    private int hallId;
+public class UpdateHallDTO {
     private int capacity;
     private SupportedMovieVersion supportedMovieVersion;
-    private int cinemaId;
 }

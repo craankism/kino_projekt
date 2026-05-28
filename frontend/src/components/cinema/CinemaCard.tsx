@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import type React from "react";
 import { type Cinema } from "../../stores/useCinemaStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ExpandMore } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
@@ -29,17 +29,32 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
   const navigate = useNavigate();
 
   const { hallList, getHall } = useHallStore();
-  const { movieList } = useMovieStore();
+  const { movieList, getMovieList } = useMovieStore();
 
   const [expandInfo, setExpandInfo] = useState<boolean>(false);
+  const [disable, setDisable] = useState<boolean>(false);
 
   function expandedInfo(): void {
     setExpandInfo(!expandInfo);
   }
 
-  const hallFilter = (movie: Movie, hallId: number) => {
+  const hallFilter = (movie: Movie, hallId: number): boolean => {
     return movie.hallList.some((element) => element === hallId);
   };
+
+  useEffect(() => {
+    getMovieList();
+  }, [getMovieList]);
+
+  useEffect(() => {
+    const hasMovies = hallList
+      .filter((hall) => hall.cinemaId === data.cinemaId)
+      .some((hall) =>
+        movieList.some((movie) => hallFilter(movie, hall.hallId)),
+      );
+
+    setDisable(hasMovies);
+  }, [movieList, hallList, data.cinemaId]);
 
   return (
     <Card sx={{ minWidth: 275, m: 2 }}>
@@ -52,7 +67,7 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
             Nr.: {data.cinemaId}
           </Typography>
         ) : null}
-        <Typography variant="h5" component="div">
+        <Typography variant="h5" component="div" sx={{ cursor: "pointer"}}onClick={() => navigate("/cinema/show/" + data.cinemaId)}>
           {data.name}
         </Typography>
         <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
@@ -67,9 +82,10 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
           </Typography>
         ) : null}
         <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 1 }}>
-          {hallList.map((hall) =>
-            hall.cinema.cinemaId == data.cinemaId ? (
-              <>
+          {hallList
+            .filter((hall) => hall.cinemaId === data.cinemaId)
+            .map((hall, index) => (
+              <div key={index}>
                 <Box
                   key={hall.hallId}
                   sx={{
@@ -104,10 +120,7 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
                     onClick={() => {
                       getHall(hall.hallId);
                       navigate(
-                        "/hall/edit/" +
-                          hall.cinema.cinemaId +
-                          "/" +
-                          hall.hallId,
+                        "/hall/edit/" + hall.cinemaId + "/" + hall.hallId,
                       );
                     }}
                   >
@@ -129,15 +142,16 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
                         variant="body2"
                         sx={{
                           color: "text.secondary",
+                          cursor: "pointer"
                         }}
+                        onClick={() => navigate("/movie/show/")}
                       >
                         {movie.title}
                       </Typography>
                     </List>
                   ))}
-              </>
-            ) : null,
-          )}
+              </div>
+            ))}
         </Box>
       </CardContent>
       <CardActions sx={{ justifyContent: "space-between" }}>
@@ -151,7 +165,7 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
           >
             Saal hinzufügen
           </Button>
-          <DeleteCinemaButton cinemaId={data.cinemaId} />
+          <DeleteCinemaButton cinemaId={data.cinemaId} disabled={disable} />
         </div>
 
         <ExpandMore aria-label="show more" onClick={() => expandedInfo()}>

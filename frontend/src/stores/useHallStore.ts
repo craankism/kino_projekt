@@ -1,11 +1,10 @@
 import { create } from "zustand";
-import type { Cinema } from "./useCinemaStore";
 
 export type Hall = {
   hallId: number;
   capacity: number;
   supportedMovieVersion: string;
-  cinema: Cinema;
+  cinemaId: number;
 };
 
 export type NewHall = {

@@ -10,7 +10,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 
 import com.kino.backend.dtos.req.CreateHallDTO;
-import com.kino.backend.dtos.res.ShowCinemaDTO;
+import com.kino.backend.dtos.req.UpdateHallDTO;
 import com.kino.backend.dtos.res.ShowHallDTO;
 import com.kino.backend.entities.Cinema;
 import com.kino.backend.entities.Hall;
@@ -58,27 +58,22 @@ public class HallService {
         return convertEntityToDto(hall);
     }
 
-    public ShowHallDTO updateHall(int hallId, CreateHallDTO createHallDTO) {
+    public ShowHallDTO updateHall(int hallId, UpdateHallDTO updateHallDTO) {
         Hall hall = hallRepo.findById(hallId)
                 .orElseThrow(() -> new RuntimeException("Hall not found with id: " + hallId));
-        Cinema cinema = cinemaRepo.findById(createHallDTO.getCinemaId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cinema not found"));
         boolean FiveDTO3D = hall.getSupportedMovieVersion() == SupportedMovieVersion.DBOX
-                && createHallDTO.getSupportedMovieVersion() == SupportedMovieVersion.R3D;
-        if (hall.getSupportedMovieVersion() == createHallDTO.getSupportedMovieVersion()) {
-            hall.setCapacity(createHallDTO.getCapacity());
-            hall.setCinema(cinema);
+                && updateHallDTO.getSupportedMovieVersion() == SupportedMovieVersion.R3D;
+        if (hall.getSupportedMovieVersion() == updateHallDTO.getSupportedMovieVersion()) {
+            hall.setCapacity(updateHallDTO.getCapacity());
             hallRepo.save(hall);
             return convertEntityToDto(hall);
         } else if (FiveDTO3D) {
-            hall.setCapacity(createHallDTO.getCapacity());
-            hall.setSupportedMovieVersion(createHallDTO.getSupportedMovieVersion());
-            hall.setCinema(cinema);
+            hall.setCapacity(updateHallDTO.getCapacity());
+            hall.setSupportedMovieVersion(updateHallDTO.getSupportedMovieVersion());
             hallRepo.save(hall);
             return convertEntityToDto(hall);
         } else {
-            // Error handling?????
-            return convertEntityToDto(hall);
+            throw new RuntimeException("Change in movie version not allowed!");
         }
     }
 
@@ -93,18 +88,10 @@ public class HallService {
     }
 
     public ShowHallDTO convertEntityToDto(Hall hall) {
-        Cinema cinema = hall.getCinema();
-        ShowCinemaDTO cinemaDto = new ShowCinemaDTO(
-                cinema.getCinemaId(),
-                cinema.getName(),
-                cinema.getAddress(),
-                cinema.getManagerName(),
-                cinema.getMaxCountRooms());
-
         return new ShowHallDTO(
                 hall.getHallId(),
                 hall.getCapacity(),
                 hall.getSupportedMovieVersion(),
-                cinemaDto);
+                hall.getCinema().getCinemaId());
     }
 }

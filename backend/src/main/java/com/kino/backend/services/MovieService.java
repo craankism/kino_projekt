@@ -11,6 +11,7 @@ import com.kino.backend.dtos.res.ShowMovieDTO;
 import com.kino.backend.entities.Hall;
 import com.kino.backend.entities.Movie;
 import com.kino.backend.enums.SupportedMovieVersion;
+import com.kino.backend.exceptions.ResourceNotFoundException;
 import com.kino.backend.repos.HallRepo;
 import com.kino.backend.repos.MovieRepo;
 
@@ -36,7 +37,7 @@ public class MovieService {
 
         for (int hallId : createMovieDTO.getHalls()) {
             Hall hall = hallRepo.findById(hallId)
-                    .orElseThrow(() -> new RuntimeException("Hall not found with id: " + hallId));
+                    .orElseThrow(() -> new ResourceNotFoundException("Hall not found with id: " + hallId));
             hall.getMovieList().add(movie);
             movie.getHallList().add(hall);
             hallRepo.save(hall);
@@ -47,7 +48,7 @@ public class MovieService {
 
     public ShowMovieDTO updateMovie(UpdateMovieDTO updateMovieDTO) {
         Movie movie = movieRepo.findById(updateMovieDTO.getMovieId())
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
         movie.setTitle(updateMovieDTO.getTitle());
         movie.setMainCharacter(updateMovieDTO.getMainCharacter());
         movie.setDescription(updateMovieDTO.getDescription());
@@ -77,7 +78,7 @@ public class MovieService {
 
     public ShowMovieDTO updateMovie(int movieId, List<Integer> hallList) {
         Movie movie = movieRepo.findById(movieId)
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
         List<Hall> newHallList = new ArrayList<>();
         for (int hallId : hallList) {
             if (hallId == 0) {

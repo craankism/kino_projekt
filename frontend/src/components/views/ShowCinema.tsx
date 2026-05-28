@@ -23,7 +23,6 @@ const ShowCinema = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             disabled
-            id="standard-read-only-input"
             helperText="Kino Id"
             defaultValue={currentCinema?.cinemaId}
             variant="standard"
@@ -33,7 +32,6 @@ const ShowCinema = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             disabled
-            id="standard-read-only-input"
             helperText="NameKino"
             defaultValue={currentCinema?.name}
             variant="standard"
@@ -43,7 +41,6 @@ const ShowCinema = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             disabled
-            id="standard-read-only-input"
             helperText="Adresse"
             defaultValue={currentCinema?.address}
             variant="standard"
@@ -53,7 +50,6 @@ const ShowCinema = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             disabled
-            id="standard-read-only-input"
             helperText="Name des Managers"
             defaultValue={currentCinema?.managerName}
             variant="standard"
@@ -63,7 +59,6 @@ const ShowCinema = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             disabled
-            id="standard-read-only-input"
             helperText="max. Anzahl an Kinosälen"
             defaultValue={currentCinema?.maxCountRooms}
             variant="standard"

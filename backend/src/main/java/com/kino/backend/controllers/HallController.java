@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kino.backend.dtos.req.CreateHallDTO;
+import com.kino.backend.dtos.req.UpdateHallDTO;
 import com.kino.backend.dtos.res.ShowHallDTO;
 import com.kino.backend.services.HallService;
 
@@ -26,7 +27,7 @@ public class HallController {
 
 
     @PostMapping
-    public ShowHallDTO createHall(@RequestBody CreateHallDTO createHallDTO) throws Exception {
+    public ShowHallDTO createHall(@RequestBody CreateHallDTO createHallDTO) {
         return hallService.createHall(createHallDTO);
     }
 
@@ -41,8 +42,8 @@ public class HallController {
     }
 
     @PutMapping("/{hallId}")
-    public ShowHallDTO updateHall(@PathVariable int hallId, @RequestBody CreateHallDTO createHallDTO) {
-        return hallService.updateHall(hallId, createHallDTO);
+    public ShowHallDTO updateHall(@PathVariable int hallId, @RequestBody UpdateHallDTO updateHallDTO) {
+        return hallService.updateHall(hallId, updateHallDTO);
     }
 
     @DeleteMapping("/{hallId}")

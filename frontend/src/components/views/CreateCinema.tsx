@@ -27,7 +27,6 @@ const CreateCinema = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             required
-            id="standard-required"
             label="Name Kino"
             placeholder="Cineplexx"
             defaultValue={name}
@@ -41,7 +40,6 @@ const CreateCinema = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             required
-            id="standard-required"
             label="Adresse"
             placeholder="Landstraßer Hauptstraße 1, 1030 Wien"
             defaultValue={address}
@@ -55,7 +53,6 @@ const CreateCinema = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             required
-            id="standard-required"
             label="Name des Managers"
             placeholder="Max Mustermann"
             defaultValue={managerName}
@@ -69,7 +66,6 @@ const CreateCinema = (): JSX.Element => {
         <Grid size={{ xs: 12, md: 6 }}>
           <TextField
             required
-            id="standard-required"
             label="max. Anzahl an Kinosälen"
             placeholder="4"
             defaultValue={maxCountRooms}

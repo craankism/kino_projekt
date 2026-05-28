@@ -1,5 +1,7 @@
 package com.kino.backend.dtos.res;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,4 +17,5 @@ public class ShowCinemaDTO {
     private String address;
     private String managerName;
     private int maxCountRooms;
+    private List<ShowHallDTO> hallList;
 }

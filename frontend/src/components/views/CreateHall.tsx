@@ -39,7 +39,6 @@ const CreateHall = (): JSX.Element => {
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               required
-              id="standard-required"
               label="Anzahl Sitzplätze"
               placeholder="20"
               defaultValue={capacity}

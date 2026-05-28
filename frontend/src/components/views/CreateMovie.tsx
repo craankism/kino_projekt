@@ -74,7 +74,6 @@ const CreateMovie = (): JSX.Element => {
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               required
-              id="standard-required"
               label="Titel"
               placeholder="Catch me if you can"
               defaultValue={title}
@@ -88,7 +87,6 @@ const CreateMovie = (): JSX.Element => {
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               required
-              id="standard-required"
               label="Hauptcharakter"
               placeholder="Leonardo Di Caprio"
               defaultValue={mainCharacter}
@@ -102,7 +100,6 @@ const CreateMovie = (): JSX.Element => {
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               required
-              id="standard-required"
               label="Beschreibung"
               placeholder="20"
               defaultValue={description}
@@ -116,7 +113,6 @@ const CreateMovie = (): JSX.Element => {
           <Grid size={{ xs: 12, md: 6 }}>
             <TextField
               required
-              id="standard-required"
               label="Veröffentlicht am"
               placeholder="23.02.1996"
               defaultValue={premieredAt}
@@ -156,7 +152,6 @@ const CreateMovie = (): JSX.Element => {
               <InputLabel id="demo-multiple-name-label">Saal</InputLabel>
               <Select
                 required
-                id="standard-select-currency"
                 multiple
                 label="Saal"
                 variant="standard"
@@ -167,7 +162,7 @@ const CreateMovie = (): JSX.Element => {
                 {hallList.map((hall, index) =>
                   movieVersion === hall.supportedMovieVersion ? (
                     <MenuItem key={index} value={hall.hallId}>
-                      Saal {hall.hallId}({hall.cinema.name})
+                      Saal {hall.hallId}
                     </MenuItem>
                   ) : null,
                 )}

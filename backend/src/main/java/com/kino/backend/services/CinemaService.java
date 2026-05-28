@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.kino.backend.dtos.req.CreateCinemaDTO;
 import com.kino.backend.dtos.res.ShowCinemaDTO;
+import com.kino.backend.dtos.res.ShowHallDTO;
 import com.kino.backend.entities.Cinema;
 import com.kino.backend.entities.Hall;
+import com.kino.backend.exceptions.ResourceNotFoundException;
 import com.kino.backend.repos.CinemaRepo;
 
 import lombok.RequiredArgsConstructor;
@@ -41,13 +43,13 @@ public class CinemaService {
 
     public ShowCinemaDTO getCinema(int cinemaId) {
         Optional<Cinema> optionalCinema = cinemaRepo.findById(cinemaId);
-        Cinema cinema = optionalCinema.orElseThrow(() -> new RuntimeException("Cinema not found"));
+        Cinema cinema = optionalCinema.orElseThrow(() -> new ResourceNotFoundException("Cinema not found"));
         return convertEntityToDto(cinema);
     }
 
     public String deleteCinema(int cinemaId) {
         Optional<Cinema> optionalCinema = cinemaRepo.findById(cinemaId);
-        Cinema cinema = optionalCinema.orElseThrow(() -> new RuntimeException("Cinema not found"));
+        Cinema cinema = optionalCinema.orElseThrow(() -> new ResourceNotFoundException("Cinema not found"));
         for (Hall hall : cinema.getHallList()) {
             if (hall.getCinema().getCinemaId() == cinemaId && hall.getMovieList().size() > 0) {
                 throw new RuntimeException("Cannot delete cinema with movies in halls");
@@ -58,7 +60,15 @@ public class CinemaService {
     }
 
     public ShowCinemaDTO convertEntityToDto(Cinema cinema) {
+        List<ShowHallDTO> hallList = new ArrayList<>();
+        for (Hall hall : cinema.getHallList()) {
+            hallList.add(new ShowHallDTO(
+                    hall.getHallId(),
+                    hall.getCapacity(),
+                    hall.getSupportedMovieVersion(),
+                    hall.getCinema().getCinemaId()));
+        }
         return new ShowCinemaDTO(cinema.getCinemaId(), cinema.getName(), cinema.getAddress(), cinema.getManagerName(),
-                cinema.getMaxCountRooms());
+                cinema.getMaxCountRooms(), hallList);
     }
 }
