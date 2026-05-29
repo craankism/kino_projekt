@@ -16,7 +16,7 @@ export type NewHall = {
 type hallState = {
   hallList: Hall[];
   currentHall: Hall | null;
-  addHall: (hall: NewHall) => Promise<void>;
+  addHall: (hall: NewHall) => void;
   getHall: (index: number) => void;
   getHallList: () => void;
   editHall: (hall: NewHall, index: number) => void;
@@ -28,24 +28,19 @@ const url = "http://localhost:8080/api/hall";
 export const useHallStore = create<hallState>((set) => ({
   hallList: [],
   currentHall: null,
-  addHall: async (hall: NewHall) => {
-    const response = await fetch(url, {
+  addHall: (hall: NewHall) => {
+    fetch(url, {
       method: "POST",
       headers: {
         "content-type": "application/JSON",
       },
       body: JSON.stringify(hall),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      // Throw error with the message from the backend
-      throw new Error(result.message || "Ein Fehler ist aufgetreten");
-    }
-
-    console.log(result);
-    set((state) => ({ hallList: [...state.hallList, result] }));
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        set((state) => ({ hallList: [...state.hallList, result] }));
+      });
   },
 
   getHallList: () => {

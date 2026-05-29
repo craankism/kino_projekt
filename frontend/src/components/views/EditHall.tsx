@@ -38,6 +38,7 @@ const EditHall = (): JSX.Element => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line
     setCapacity(currentHall?.capacity || 0);
     setSupportedMovieVersion(currentHall?.supportedMovieVersion || "");
   }, [currentHall]);

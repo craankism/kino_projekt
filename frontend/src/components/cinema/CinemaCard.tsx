@@ -33,6 +33,7 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
 
   const [expandInfo, setExpandInfo] = useState<boolean>(false);
   const [disable, setDisable] = useState<boolean>(false);
+  const [disableHallAdd, setDisableHallAdd] = useState<boolean>(false);
 
   function expandedInfo(): void {
     setExpandInfo(!expandInfo);
@@ -52,9 +53,10 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
       .some((hall) =>
         movieList.some((movie) => hallFilter(movie, hall.hallId)),
       );
-
+    // eslint-disable-next-line
     setDisable(hasMovies);
-  }, [movieList, hallList, data.cinemaId]);
+    setDisableHallAdd(data.maxCountRooms <= (hallList.filter((hall) => hall.cinemaId == data.cinemaId).length));
+  }, [movieList, hallList, data.cinemaId, data.maxCountRooms]);
 
   return (
     <Card sx={{ minWidth: 275, m: 2 }}>
@@ -67,7 +69,12 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
             Nr.: {data.cinemaId}
           </Typography>
         ) : null}
-        <Typography variant="h5" component="div" sx={{ cursor: "pointer"}}onClick={() => navigate("/cinema/show/" + data.cinemaId)}>
+        <Typography
+          variant="h5"
+          component="div"
+          sx={{ cursor: "pointer" }}
+          onClick={() => navigate("/cinema/show/" + data.cinemaId)}
+        >
           {data.name}
         </Typography>
         <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
@@ -78,7 +85,7 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
         ) : null}
         {expandInfo ? (
           <Typography variant="body2">
-            Anzahl der Räume: {data.maxCountRooms}
+            Maximale Anzahl der Räume: {data.maxCountRooms}
           </Typography>
         ) : null}
         <Box sx={{ mt: 2, display: "flex", flexDirection: "column", gap: 1 }}>
@@ -142,7 +149,7 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
                         variant="body2"
                         sx={{
                           color: "text.secondary",
-                          cursor: "pointer"
+                          cursor: "pointer",
                         }}
                         onClick={() => navigate("/movie/show/")}
                       >
@@ -162,6 +169,7 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
             startIcon={<AddIcon />}
             sx={{ mr: 2 }}
             onClick={() => navigate("/hall/create/" + data.cinemaId)}
+            disabled={disableHallAdd}
           >
             Saal hinzufügen
           </Button>

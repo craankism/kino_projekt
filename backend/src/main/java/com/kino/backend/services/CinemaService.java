@@ -28,7 +28,6 @@ public class CinemaService {
         cinema.setAddress(createCinemaDTO.getAddress());
         cinema.setManagerName(createCinemaDTO.getManagerName());
         cinema.setMaxCountRooms(createCinemaDTO.getMaxCountRooms());
-        cinema.setRoomCounter(0);
         cinemaRepo.save(cinema);
         return convertEntityToDto(cinema);
     }
