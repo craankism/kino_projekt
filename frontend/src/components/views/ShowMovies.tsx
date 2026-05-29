@@ -94,11 +94,13 @@ const ShowMovies = (): JSX.Element => {
                       }
                       MenuProps={MenuProps}
                     >
-                      {hallList.map((hall) => (
-                        <MenuItem key={hall.hallId} value={hall.hallId}>
-                          {hall.hallId}
-                        </MenuItem>
-                      ))}
+                      {hallList.map((hall) =>
+                        movie.movieVersion === hall.supportedMovieVersion ? (
+                          <MenuItem key={hall.hallId} value={hall.hallId}>
+                            {hall.hallId}
+                          </MenuItem>
+                        ) : null,
+                      )}
                     </Select>
                   </FormControl>
                 </TableCell>

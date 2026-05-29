@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useHallStore } from "../../stores/useHallStore";
 import { useMovieStore } from "../../stores/useMovieStore";
 import SaveAndBackButton from "../nav/SaveAndBackButton";
+import { useCinemaStore } from "../../stores/useCinemaStore";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -33,11 +34,13 @@ const MenuProps = {
 
 const CreateMovie = (): JSX.Element => {
   const navigate = useNavigate();
+  const { cinemaList } = useCinemaStore();
   const { hallList } = useHallStore();
   const { addMovie } = useMovieStore();
 
   const [title, setTitle] = useState<string>("Catch me if you can");
-  const [mainCharacter, setMainCharacter] = useState<string>("Leonardo Di Caprio");
+  const [mainCharacter, setMainCharacter] =
+    useState<string>("Leonardo Di Caprio");
   const [description, setDescription] = useState<string>("liesmich");
   const [premieredAt, setPremieredAt] = useState<string>("23.02.1996");
   const [movieVersion, setMovieVersion] = useState<string>("");
@@ -162,7 +165,13 @@ const CreateMovie = (): JSX.Element => {
                 {hallList.map((hall, index) =>
                   movieVersion === hall.supportedMovieVersion ? (
                     <MenuItem key={index} value={hall.hallId}>
-                      Saal {hall.hallId}
+                      Saal {hall.hallId}(
+                      {
+                        cinemaList.find(
+                          (cinema) => cinema.cinemaId === hall.cinemaId,
+                        )?.name
+                      }
+                      )
                     </MenuItem>
                   ) : null,
                 )}

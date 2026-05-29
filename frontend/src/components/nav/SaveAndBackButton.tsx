@@ -18,7 +18,6 @@ const SaveAndBackButton = (): JSX.Element => {
         Speichern
       </Button>
       <Button
-        type="submit"
         variant="contained"
         startIcon={<NavigateBeforeIcon />}
         sx={{ mr: 2 }}

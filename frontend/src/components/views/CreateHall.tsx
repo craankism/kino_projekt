@@ -1,9 +1,11 @@
 import type { JSX } from "@emotion/react/jsx-runtime";
 import {
+  Alert,
   FormControlLabel,
   Grid,
   Radio,
   RadioGroup,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -20,13 +22,29 @@ const CreateHall = (): JSX.Element => {
   const [capacity, setCapacity] = useState<number>(2);
   const [supportedMovieVersion, setSupportedMovieVersion] =
     useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (
+    e: React.SubmitEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
     const cinemaId = Number(params.cinemaId);
     const newHall = { capacity, supportedMovieVersion, cinemaId };
-    addHall(newHall);
-    navigate("/");
+
+    try {
+      await addHall(newHall);
+      navigate("/");
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Ein Fehler ist aufgetreten",
+      );
+      setOpenSnackbar(true);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -75,6 +93,21 @@ const CreateHall = (): JSX.Element => {
           <SaveAndBackButton />
         </Grid>
       </form>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

@@ -15,6 +15,7 @@ import com.kino.backend.dtos.res.ShowHallDTO;
 import com.kino.backend.entities.Cinema;
 import com.kino.backend.entities.Hall;
 import com.kino.backend.enums.SupportedMovieVersion;
+import com.kino.backend.exceptions.ResourceNotFoundException;
 import com.kino.backend.repos.CinemaRepo;
 import com.kino.backend.repos.HallRepo;
 
@@ -31,8 +32,8 @@ public class HallService {
 
     public ShowHallDTO createHall(CreateHallDTO createHallDTO) {
         Cinema cinema = cinemaRepo.findById(createHallDTO.getCinemaId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cinema not found"));
-        if (cinema.getMaxCountRooms() < cinema.getCinemaId()) {
+                .orElseThrow(() -> new ResourceNotFoundException("Kino wurde nicht gefunden!"));
+        if (cinema.getRoomCounter() >= cinema.getMaxCountRooms()) {
             throw new RuntimeException("Maximale Raumanzahl überschritten!");
         }
         Hall hall = new Hall();
@@ -40,6 +41,8 @@ public class HallService {
         hall.setSupportedMovieVersion(createHallDTO.getSupportedMovieVersion());
         hall.setCinema(cinema);
         hallRepo.save(hall);
+        cinema.setRoomCounter(cinema.getRoomCounter() + 1);
+        cinemaRepo.save(cinema);
         return convertEntityToDto(hall);
     }
 

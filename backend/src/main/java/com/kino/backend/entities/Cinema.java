@@ -38,6 +38,8 @@ public class Cinema {
     @Column(nullable = false)
     private int maxCountRooms;
 
+    private int roomCounter;
+
     @OneToMany(mappedBy = "cinema", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Hall> hallList = new ArrayList<>();
 }

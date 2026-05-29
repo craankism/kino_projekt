@@ -29,11 +29,10 @@ const EditHall = (): JSX.Element => {
     const hallId = Number(params.hallId);
     const newHall = { capacity, supportedMovieVersion, cinemaId };
     editHall(newHall, hallId);
-    // movieList -> hallList -> hallId -> delete id
     movieList.forEach((movie) => {
-      movie.hallList.map()
+      const newHallList = movie.hallList.filter((hallNumber) => hallId != hallNumber)
+      updateMovie(movie.movieId, newHallList);
     })
-    updateMovie()
     getHallList();
     navigate("/");
   };
