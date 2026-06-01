@@ -117,7 +117,7 @@ const CinemaCard: React.FC<CinemaCardProps> = ({ data }): JSX.Element => {
                       fontWeight: 500,
                     }}
                   >
-                    Saal {hall.hallId} | Version: {hall.supportedMovieVersion} |{" "}
+                    Saal {index + 1} | Version: {hall.supportedMovieVersion} |{" "}
                     Sitzplätze: {hall.capacity}
                   </Typography>
                   <IconButton

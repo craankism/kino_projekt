@@ -33,6 +33,8 @@ const HallTable: React.FC<HallTableProps> = ({ cinemaId }) => {
     getMovieList();
   }, [getHallList, getMovieList]);
 
+  let counter = 1;
+
   return (
     <>
       <TableContainer sx={{ minWidth: "100%" }}>
@@ -50,7 +52,7 @@ const HallTable: React.FC<HallTableProps> = ({ cinemaId }) => {
             {hallList.map((hall, index) =>
               cinemaId == hall.cinemaId ? (
                 <TableRow key={index}>
-                  <TableCell>{hall.hallId}</TableCell>
+                  <TableCell>{counter++}</TableCell>
                   <TableCell>{hall.supportedMovieVersion}</TableCell>
                   <TableCell>{hall.capacity}</TableCell>
                   <TableCell>

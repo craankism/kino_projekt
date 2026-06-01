@@ -76,8 +76,8 @@ const ShowCinema = (): JSX.Element => {
           </Button>
         </Grid>
       </Grid>
-      <Grid size={{ xs: 12, md: 6 }}> 
-        <HallTable cinemaId={currentCinema?.cinemaId || 0}/>
+      <Grid size={{ xs: 12, md: 6 }}>
+        <HallTable cinemaId={currentCinema?.cinemaId || 0} />
       </Grid>
     </>
   );

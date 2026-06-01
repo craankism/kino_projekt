@@ -1,10 +1,14 @@
-import type { JSX } from "@emotion/react/jsx-runtime";
 import { Button, Grid } from "@mui/material";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router-dom";
+import type React from "react";
 
-const SaveAndBackButton = (): JSX.Element => {
+type SaveAndBackButtonProps = {
+  disable?: boolean;
+};
+
+const SaveAndBackButton: React.FC<SaveAndBackButtonProps> = ({ disable }) => {
   const navigate = useNavigate();
 
   return (
@@ -14,6 +18,7 @@ const SaveAndBackButton = (): JSX.Element => {
         variant="contained"
         startIcon={<SaveIcon />}
         sx={{ mr: 2 }}
+        disabled={disable}
       >
         Speichern
       </Button>
