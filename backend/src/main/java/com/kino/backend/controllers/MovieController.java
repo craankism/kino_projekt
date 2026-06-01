@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kino.backend.dtos.req.CreateMovieDTO;
-import com.kino.backend.dtos.req.UpdateMovieDTO;
 import com.kino.backend.dtos.res.ShowMovieDTO;
 import com.kino.backend.enums.SupportedMovieVersion;
 import com.kino.backend.services.MovieService;
@@ -28,11 +27,6 @@ public class MovieController {
     @PostMapping
     public ShowMovieDTO createMovie(@RequestBody CreateMovieDTO createMovieDTO) throws Exception {
         return movieService.createMovie(createMovieDTO);
-    }
-
-    @PutMapping
-    public ShowMovieDTO updateMovie(@RequestBody UpdateMovieDTO updateMovieDTO) {
-        return movieService.updateMovie(updateMovieDTO);
     }
 
     @GetMapping

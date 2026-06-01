@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.kino.backend.dtos.req.CreateMovieDTO;
-import com.kino.backend.dtos.req.UpdateMovieDTO;
 import com.kino.backend.dtos.res.ShowMovieDTO;
 import com.kino.backend.entities.Hall;
 import com.kino.backend.entities.Movie;
@@ -33,30 +32,19 @@ public class MovieService {
         movie.setDescription(createMovieDTO.getDescription());
         movie.setPremieredAt(createMovieDTO.getPremieredAt());
         movie.setMovieVersion(createMovieDTO.getMovieVersion());
-        movieRepo.save(movie);
 
         for (int hallId : createMovieDTO.getHalls()) {
             Hall hall = hallRepo.findById(hallId)
                     .orElseThrow(() -> new ResourceNotFoundException("Hall not found with id: " + hallId));
+            if (hall.getSupportedMovieVersion() != movie.getMovieVersion()) {
+                throw new RuntimeException("Movieversion not supported by hallversion");
+            }
             hall.getMovieList().add(movie);
             movie.getHallList().add(hall);
             hallRepo.save(hall);
         }
 
-        return convertEntitiyToDto(movie);
-    }
-
-    public ShowMovieDTO updateMovie(UpdateMovieDTO updateMovieDTO) {
-        Movie movie = movieRepo.findById(updateMovieDTO.getMovieId())
-                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
-        movie.setTitle(updateMovieDTO.getTitle());
-        movie.setMainCharacter(updateMovieDTO.getMainCharacter());
-        movie.setDescription(updateMovieDTO.getDescription());
-        movie.setPremieredAt(updateMovieDTO.getPremieredAt());
-        movie.setMovieVersion(updateMovieDTO.getMovieVersion());
-        movie.setHallList(updateMovieDTO.getHallList());
         movieRepo.save(movie);
-
         return convertEntitiyToDto(movie);
     }
 
@@ -84,7 +72,11 @@ public class MovieService {
             if (hallId == 0) {
                 break;
             }
-            newHallList.add(hallRepo.findById(hallId).orElseThrow(() -> new RuntimeException("Hall not found")));
+            Hall newHall = hallRepo.findById(hallId).orElseThrow(() -> new RuntimeException("Hall not found"));
+            if (newHall.getSupportedMovieVersion() != movie.getMovieVersion()) {
+                throw new RuntimeException("Hall doesn't support movie version");
+            }
+            newHallList.add(newHall);
         }
         movie.setHallList(newHallList);
         movieRepo.save(movie);

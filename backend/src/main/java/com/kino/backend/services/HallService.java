@@ -30,6 +30,7 @@ public class HallService {
     public ShowHallDTO createHall(CreateHallDTO createHallDTO) {
         Cinema cinema = cinemaRepo.findById(createHallDTO.getCinemaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Kino wurde nicht gefunden!"));
+                
         if (cinema.getHallList().size() >= cinema.getMaxCountRooms()) {
             throw new RuntimeException("Maximale Raumanzahl überschritten!");
         }
@@ -58,9 +59,15 @@ public class HallService {
 
     public ShowHallDTO updateHall(int hallId, UpdateHallDTO updateHallDTO) {
         Hall hall = hallRepo.findById(hallId)
-                .orElseThrow(() -> new RuntimeException("Hall not found with id: " + hallId));
+                .orElseThrow(() -> new ResourceNotFoundException("Hall not found with id: " + hallId));
+
+        if (hall.getMovieList().size() > 0) {
+            throw new RuntimeException("Cannot edit hall, while movies are assigned to it");
+        }
+
         boolean FiveDTO3D = hall.getSupportedMovieVersion() == SupportedMovieVersion.DBOX
                 && updateHallDTO.getSupportedMovieVersion() == SupportedMovieVersion.R3D;
+
         if (hall.getSupportedMovieVersion() == updateHallDTO.getSupportedMovieVersion()) {
             hall.setCapacity(updateHallDTO.getCapacity());
             hallRepo.save(hall);
@@ -71,7 +78,7 @@ public class HallService {
             hallRepo.save(hall);
             return convertEntityToDto(hall);
         } else {
-            throw new RuntimeException("Change in movie version not allowed!");
+            throw new RuntimeException("Change in version not allowed!");
         }
     }
 
