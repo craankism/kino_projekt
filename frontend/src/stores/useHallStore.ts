@@ -20,7 +20,6 @@ type hallState = {
   getHall: (index: number) => void;
   getHallList: () => void;
   editHall: (hall: NewHall, index: number) => void;
-  deleteHall: (index: number) => void;
 };
 
 const url = "http://localhost:8080/api/hall";
@@ -74,24 +73,6 @@ export const useHallStore = create<hallState>((set) => ({
             hallId === index ? result : hall,
           ),
         }));
-      });
-  },
-
-  deleteHall: (index) => {
-    fetch(url + "/" + index, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json",
-      },
-    })
-      .then((res) => {
-        set((state) => ({
-          hallList: state.hallList.filter((hall) => hall.hallId !== index),
-        }));
-        return res.text();
-      })
-      .then((text) => {
-        console.log(text);
       });
   },
 }));

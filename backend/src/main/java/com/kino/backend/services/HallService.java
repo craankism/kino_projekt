@@ -1,11 +1,9 @@
 package com.kino.backend.services;
 
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import com.kino.backend.dtos.req.CreateHallDTO;
 import com.kino.backend.dtos.req.UpdateHallDTO;
 import com.kino.backend.dtos.res.ShowHallDTO;
@@ -15,22 +13,19 @@ import com.kino.backend.enums.SupportedMovieVersion;
 import com.kino.backend.exceptions.ResourceNotFoundException;
 import com.kino.backend.repos.CinemaRepo;
 import com.kino.backend.repos.HallRepo;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class HallService {
 
     private final HallRepo hallRepo;
     private final CinemaRepo cinemaRepo;
 
-    public HallService(HallRepo hallRepo, CinemaRepo cinemaRepo) {
-        this.hallRepo = hallRepo;
-        this.cinemaRepo = cinemaRepo;
-    }
-
     public ShowHallDTO createHall(CreateHallDTO createHallDTO) {
         Cinema cinema = cinemaRepo.findById(createHallDTO.getCinemaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Kino wurde nicht gefunden!"));
-                
+
         if (cinema.getHallList().size() >= cinema.getMaxCountRooms()) {
             throw new RuntimeException("Maximale Raumanzahl überschritten!");
         }
@@ -80,16 +75,6 @@ public class HallService {
         } else {
             throw new RuntimeException("Change in version not allowed!");
         }
-    }
-
-    public String deleteHall(int hallId) {
-        for (Hall hall : hallRepo.findAll()) {
-            if (hall.getHallId() == hallId) {
-                hallRepo.delete(hall);
-                return "Saal gelöscht!";
-            }
-        }
-        return "Saal nicht gefunden";
     }
 
     public ShowHallDTO convertEntityToDto(Hall hall) {

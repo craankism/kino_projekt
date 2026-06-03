@@ -3,9 +3,7 @@ package com.kino.backend.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-
 import com.kino.backend.dtos.req.CreateCinemaDTO;
 import com.kino.backend.dtos.res.ShowCinemaDTO;
 import com.kino.backend.dtos.res.ShowHallDTO;
@@ -13,7 +11,6 @@ import com.kino.backend.entities.Cinema;
 import com.kino.backend.entities.Hall;
 import com.kino.backend.exceptions.ResourceNotFoundException;
 import com.kino.backend.repos.CinemaRepo;
-
 import lombok.RequiredArgsConstructor;
 
 @Service

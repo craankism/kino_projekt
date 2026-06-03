@@ -1,7 +1,6 @@
 package com.kino.backend.dtos.res;
 
 import com.kino.backend.enums.SupportedMovieVersion;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

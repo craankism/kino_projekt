@@ -2,9 +2,7 @@ package com.kino.backend.services;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.kino.backend.dtos.req.CreateMovieDTO;
 import com.kino.backend.dtos.res.ShowMovieDTO;
 import com.kino.backend.entities.Hall;
@@ -13,17 +11,14 @@ import com.kino.backend.enums.SupportedMovieVersion;
 import com.kino.backend.exceptions.ResourceNotFoundException;
 import com.kino.backend.repos.HallRepo;
 import com.kino.backend.repos.MovieRepo;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class MovieService {
 
     private final MovieRepo movieRepo;
     private final HallRepo hallRepo;
-
-    public MovieService(MovieRepo movieRepo, HallRepo hallRepo) {
-        this.movieRepo = movieRepo;
-        this.hallRepo = hallRepo;
-    }
 
     public ShowMovieDTO createMovie(CreateMovieDTO createMovieDTO) {
         Movie movie = new Movie();
@@ -37,7 +32,7 @@ public class MovieService {
             Hall hall = hallRepo.findById(hallId)
                     .orElseThrow(() -> new ResourceNotFoundException("Hall not found with id: " + hallId));
             if (hall.getSupportedMovieVersion() != movie.getMovieVersion()) {
-                throw new RuntimeException("Movieversion not supported by hallversion");
+                throw new RuntimeException("movie-version not supported by hall");
             }
             hall.getMovieList().add(movie);
             movie.getHallList().add(hall);
